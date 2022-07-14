@@ -6,70 +6,78 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/Welcome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>资金管理管理</el-breadcrumb-item>
-      <el-breadcrumb-item>交易记录</el-breadcrumb-item>
+      <el-breadcrumb-item>交易流水</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- table content -->
     <el-card>
-      <!-- search section -->
+      <el-form>
+        <el-form-item label="按照时间筛选:">
+          <el-date-picker v-model="search_data.startTime" type="datetimerange">
+          </el-date-picker>
+          --
+          <el-date-picker v-model="search_data.endTime" type="datetimerange">
+          </el-date-picker>
 
-      <!-- 1.search section -->
-      <!-- 1.1 search input -->
+          <!-- elementUI date-picker报错
+          https://blog.csdn.net/qq_21473443/article/details/125333154?spm=1001.2014.3001.5502
+           -->
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="small" icon="search">筛选</el-button>
+        </el-form-item>
 
-      <!-- S: When you click the search or hit the eneter, it will call the api and render the data below -->
-
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-input placeholder="请输入内容">
-            <!-- 1.2 search icon -->
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-input>
-        </el-col>
-
-        <!-- 1.3 add new user : Modal icon effect use-->
-        <!-- S:1. Modal Compoenent use 2. call the api request-->
-        <el-col :span="4">
-          <el-button type="primary">添加用户</el-button></el-col
-        >
-      </el-row>
-
+        <el-button type="primary">添加用户</el-button>
+      </el-form>
       <el-row>
         <!-- 2.data display -->
         <!-- S:When the page come in, then load the data from  -->
-        <el-table :data="userList" border>
+        <el-table :data="profileList" border>
           <!-- 2.2 data row -->
           <!-- 2.1 column name first row -->
           <!-- index column -->
           <el-table-column
-            label="列表"
+            prop="date"
+            label="创建时间"
             width="140"
             align="center"
-            type="index"
             fixed
           >
           </el-table-column>
-          <el-table-column prop="username" label="姓名" width="140" align="center">
-          </el-table-column>
-          <el-table-column prop="email" label="邮箱" width="120" align="center">
-          </el-table-column>
-          <el-table-column prop="mobile" label="电话" align="center">
-          </el-table-column>
-          <el-table-column prop="role_name" label="角色" width="120" align="center">
-          </el-table-column>
-          <!-- data switch status -->
+
           <el-table-column
-            prop="mg_state"
-            label="状态"
+            prop="describe"
+            label="收支类型"
             width="120"
             align="center"
           >
-            <el-switch
-              v-model="value"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            >
-            </el-switch>
           </el-table-column>
+          <el-table-column prop="income" label="收入" align="center">
+          </el-table-column>
+          <el-table-column
+            prop="expand"
+            label="支出"
+            width="120"
+            align="center"
+          >
+          </el-table-column>
+          <!-- data switch status -->
+          <el-table-column
+            prop="cash"
+            label="账户现金"
+            width="120"
+            align="center"
+          >
+          </el-table-column>
+
+          <el-table-column
+            prop="remark"
+            label="备注"
+            width="140"
+            align="center"
+          >
+          </el-table-column>
+
           <!-- 2.3 data edit, delete, assign the perssion :Modal Pop up-->
           <el-table-column
             prop="address"
@@ -125,34 +133,35 @@ export default {
 
   data() {
     return {
-      queryInfo: {
-        query: "",
-        pagenum: 1,
-        pagesize: 4,
-      },
-      userList: [],
+     
+
+      profileList: [],
       value: true,
       currentPage4: 4,
       total: "",
       pagenum: "",
+      search_data: {
+        startTime: "",
+        endTime: "",
+      },
+      allTableDate: [], //存储从后端获取到的全部数据
+      filterTableData: [], //经过时间筛选后得到的数据
     };
   },
 
-  // created() {
-  //   // load the table data first
-  //   this.loadData();
-  // },
+  created() {
+    // load the table data first
+    this.loadData();
+  },
 
   methods: {
     // Load the data
 
     async loadData() {
-      await this.$axios
-        .get("/api/users", { params: this.queryInfo })
-        .then((res) => {
-          console.log(res.data);
-          this.userList = res.data.data.users;
-        });
+      await this.$axios.get("http://localhost:8800/api/profile").then((res) => {
+        console.log(res.data);
+        this.profileList = res.data;
+      });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -160,7 +169,7 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-  }
+  },
 };
 </script>
 
@@ -173,5 +182,9 @@ export default {
 }
 .el-row {
   margin-bottom: 20px;
+}
+.el-date-editor--datetimerange.el-input,
+.el-date-editor--datetimerange.el-input__inner {
+  width: 200px;
 }
 </style>

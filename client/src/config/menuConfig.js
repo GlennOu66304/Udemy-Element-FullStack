@@ -21,7 +21,7 @@ const menuList = [
     children: [
       {
         id: 110,
-        authName: "交易记录",
+        authName: "交易流水",
         path: "funds",
         children: [],
         order: null,

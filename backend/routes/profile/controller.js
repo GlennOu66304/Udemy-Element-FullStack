@@ -1,17 +1,18 @@
-import TicketModel from "../../models/Ticket.js ";
+import ProfileModel from "../../models/Profile.js ";
 import UserModel from "../../models/User.js ";
 export default {
-  createTicket: async (req, res) => {
+  createProfile: async (req, res) => {
     //  use the Model
-    const newTicket = new TicketModel({
-      user: req.user.id,
-      name: req.body.name,
-      email: req.body.email,
-      product: req.body.product,
-      desc: req.body.desc,
+    const newProfile = new ProfileModel({
+      type: req.body.type,
+      describe: req.body.describ,
+      income: req.body.income,
+      expand: req.body.expand,
+      cash: req.body.cash,
+      remark: req.body.remark,
     });
     // save the modle data into the database
-    newTicket
+    newProfile
       .save()
       .then((ticket) => {
         res.status(200).json(ticket);
@@ -21,9 +22,9 @@ export default {
       });
   },
   //Update  ticket
-  updateTicket: async (req, res) => {
+  updateProfile: async (req, res) => {
     try {
-      const ticket = await TicketModel.findByIdAndUpdate(
+      const profile = await ProfileModel.findByIdAndUpdate(
         req.params.id,
         {
           $set: req.body,
@@ -33,15 +34,15 @@ export default {
       // [yup this looks like a confirmed bug:]
       // https://github.com/Automattic/mongoose/issues/5455
       // console.log(req.params.id);
-      res.status(200).json(ticket);
+      res.status(200).json(profile);
     } catch (err) {
       res.status(500).json(err);
     }
   },
 
   //delete ticket
-  deletetTicket: async (req, res) => {
-    TicketModel.findOneAndDelete(req.params.id)
+  deletetProfile: async (req, res) => {
+    ProfileModel.findOneAndDelete(req.params.id)
       .then(() => {
         res.status(200).json("Ticket has been deleted");
       })
@@ -50,28 +51,26 @@ export default {
       });
   },
 
-  //get a user
+  //get a profile
 
-  getATicket: async (req, res) => {
+  getAProfile: async (req, res) => {
     // ticket details content only the ticket creater can view it
     // verifiy the user login, then go to the ticket id
     console.log(req.params.id);
-    await TicketModel.findById(req.params.id, (err, docs) => {
+    await ProfileModel.findById(req.params.id, (err, docs) => {
       if (err) {
-        res.status(404).json({ msg: "no ticket details found" });
+        res.status(404).json({ msg: "no Profile details found" });
       } else {
         // console.log("Result : ", docs);
         res.status(200).json(docs);
       }
-    })
-    
-     
+    });
   },
 
   // get all ticket
-  getAuserAllTicket: async (req, res) => {
+  getAuserAllProfile: async (req, res) => {
     // console.log(req.user.id);
-    const data = await TicketModel.find({ user: req.user.id }, (err, res) => {
+    const data = await ProfileModel.find((err, res) => {
       if (err) {
         // res.status(403).json({ msg: "no user found" });
         console.log(err);

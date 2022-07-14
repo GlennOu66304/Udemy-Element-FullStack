@@ -46,7 +46,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 export default {
   name: "Login",
   data() {
@@ -92,7 +92,7 @@ export default {
         }
 
         // desctructure content
-        const { data } = await this.$axios.post(
+        const { data } = await axios.post(
           "http://localhost:8800/api/auth/login",
           this.loginForm
         );

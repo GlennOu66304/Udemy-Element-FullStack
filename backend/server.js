@@ -7,12 +7,12 @@ app.use(cors());
 app.use(express.json());
 
 import authRoute from "./routes/auth/auth.js";
-import ticketRoute from "./routes/ticket/tickets.js";
 
+import profileRoute from "./routes/profile/profile.js";
 // router system here
 
 app.use("/api/auth", authRoute);
-app.use("/api/ticket", ticketRoute);
+app.use("/api/profile", profileRoute);
 
 dotenv.config();
 // mongodb connect

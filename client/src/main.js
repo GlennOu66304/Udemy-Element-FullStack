@@ -3,16 +3,16 @@ import App from "./App.vue";
 import router from "./router/index.js";
 import axios from "axios";
 Vue.prototype.$axios = axios;
-// axios.interceptors.request.use(
-//   (config) => {
-//     config.headers.Authorization = window.sessionStorage.getItem("token");
-//     // console.log(config);
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+axios.interceptors.request.use(
+  (config) => {
+    config.headers.Authorization = window.sessionStorage.getItem("token");
+    // console.log(config);
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 import {
   Form,
   FormItem,
@@ -42,6 +42,8 @@ import {
   Option,
   Tabs,
   TabPane,
+  DatePicker,
+
 } from "element-ui";
 
 Vue.use(Form);
@@ -72,6 +74,8 @@ Vue.use(Switch);
 Vue.use(Option);
 Vue.use(Tabs);
 Vue.use(TabPane);
+Vue.use(DatePicker);
+
 Vue.config.productionTip = false;
 Vue.prototype.$message = Message;
 new Vue({

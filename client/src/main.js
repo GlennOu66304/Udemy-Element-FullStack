@@ -43,6 +43,7 @@ import {
   Tabs,
   TabPane,
   DatePicker,
+  Dialog
 
 } from "element-ui";
 
@@ -75,7 +76,7 @@ Vue.use(Option);
 Vue.use(Tabs);
 Vue.use(TabPane);
 Vue.use(DatePicker);
-
+Vue.use(Dialog);
 Vue.config.productionTip = false;
 Vue.prototype.$message = Message;
 new Vue({

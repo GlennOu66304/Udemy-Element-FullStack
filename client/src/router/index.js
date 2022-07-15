@@ -2,6 +2,7 @@ import VueRouter from "vue-router";
 import Vue from "vue";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
 import Welcome from "../views/Welcome.vue";
 import Funds from "../views/Funds.vue";
 import Info from "../views/Info.vue";
@@ -13,11 +14,16 @@ const routes = [
   //   path: "/home",
   //   redirect: "/",
   // },
-
   {
     path: "/",
     name: "login",
     component: Login,
+  },
+
+  {
+    path: "/register",
+    name: "register",
+    component: Register,
   },
   {
     path: "/login",
@@ -61,7 +67,7 @@ router.beforeEach((to, from, next) => {
   const isLogin = window.sessionStorage.token ? true : false;
 
   //if the router path is login, then just head to the login path
-  if (to.path == "/login") {
+  if (to.path == "/login" || to.path == "/register") {
     next();
   } else {
     // else, check if it localstorage contains the token, yes go to the dash board page, other wise go back to the login page

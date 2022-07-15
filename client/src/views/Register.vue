@@ -6,9 +6,9 @@
       <div class="login_avatar">
         <img src="../assets/logo.png" alt="" />
       </div>
-      <h1>Login</h1>
-      <!-- login form -->
 
+      <!-- login form -->
+      <h2>Sign Up</h2>
       <el-form
         :model="loginForm"
         :rules="login_rules"
@@ -40,10 +40,7 @@
           <el-button type="primary" @click="submitForm">提交</el-button>
           <el-button type="info" @click="resetForm">重置</el-button>
         </el-form-item>
-        <!-- sign up page -->
-        <div @click="$router.push('/register')">register account</div>
-        <!-- Vue.js redirection to another page -->
-        <!-- https://stackoverflow.com/questions/35664550/vue-js-redirection-to-another-page -->
+        <div @click="$router.push('/login')">login</div>
       </el-form>
     </div>
   </div>
@@ -52,7 +49,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "Login",
+  name: "Register",
   data() {
     return {
       login_rules: {

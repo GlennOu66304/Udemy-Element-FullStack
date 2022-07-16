@@ -13,16 +13,29 @@
     <el-card>
       <el-form>
         <el-form-item label="按照时间筛选:">
-          <el-date-picker v-model="search_data.startTime" type="datetimerange">
+          <el-date-picker
+            v-model="search_data.startTime"
+            type="datetime"
+            placeholder="选择开始时间"
+          >
           </el-date-picker>
           --
-          <el-date-picker v-model="search_data.endTime" type="datetimerange">
+          <el-date-picker
+            v-model="search_data.endTime"
+            type="datetime"
+            placeholder="“选择结束时间”"
+          >
           </el-date-picker>
 
           <!-- elementUI date-picker报错
           https://blog.csdn.net/qq_21473443/article/details/125333154?spm=1001.2014.3001.5502
            -->
-          <el-button class="select" type="primary" size="small" icon="search"
+          <el-button
+            class="select"
+            type="primary"
+            size="small"
+            icon="search"
+            @click="handleSearch()"
             >筛选</el-button
           >
           <el-button
@@ -386,6 +399,7 @@ export default {
       await this.$axios.get("http://localhost:8800/api/profile").then((res) => {
         // console.log(res.data);
         this.allProfileList = res.data;
+        this.filterTableData = res.data;
         this.total = res.data.length;
         this.profileList = this.allProfileList.filter((item, index) => {
           return index < this.pagesize;
@@ -449,9 +463,13 @@ export default {
         // vue的$axios请求设置为form表单类型
         // https://blog.csdn.net/s18813688772/article/details/111715754
         await this.$axios
-          .put(`http://localhost:8800/api/profile/${this.editFund_form._id}`, this.editFund_form, {
-            headers: { "content-type": "application/json" },
-          })
+          .put(
+            `http://localhost:8800/api/profile/${this.editFund_form._id}`,
+            this.editFund_form,
+            {
+              headers: { "content-type": "application/json" },
+            }
+          )
           .then((res) => {
             this.allProfileList = res.data;
             this.$message({
@@ -471,7 +489,7 @@ export default {
     handleEdit(row) {
       this.dialogEditVisible = true;
       this.editFund_form = row;
-      console.log(this.editFund_form)
+      console.log(this.editFund_form);
     },
     async handleDelete(id) {
       await this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -505,6 +523,28 @@ export default {
           });
         });
       console.log(id);
+    },
+    async handleSearch() {
+      if (!this.search_data.startTime || !this.search_data.endTime) {
+        this.$message({
+          type: "warning",
+          message: "请选择区间",
+        });
+        this.loadData();
+        return;
+      }
+      const sTime = this.search_data.startTime.getTime();
+      const eTime = this.search_data.endTime.getTime();
+      this.allProfileList = this.filterTableData.filter((item) => {
+        // console.log(item)
+        const date = new Date(item.date);
+        const time = date.getTime();
+        return time >= sTime && time <= eTime;
+      });
+      this.profileList = this.allProfileList.filter((item, index) => {
+        return index < this.pagesize;
+      });
+      // console.log(this.allProfileList);
     },
   },
 };

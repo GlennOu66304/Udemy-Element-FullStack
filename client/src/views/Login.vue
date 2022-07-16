@@ -2,11 +2,7 @@
   <div class="login_container">
     <!-- login area -->
     <div class="login_box">
-      <!-- avatar -->
-      <div class="login_avatar">
-        <img src="../assets/logo.png" alt="" />
-      </div>
-      <h1>Login</h1>
+      <div class="company_name">米修在线后台管理系统</div>
       <!-- login form -->
 
       <el-form
@@ -17,7 +13,10 @@
         class="login_form"
       >
         <!-- email -->
-        <el-form-item prop="email">
+        <!-- el-form的label和el-input不在同一行
+https://blog.csdn.net/m0_46581222/article/details/123559956
+ -->
+        <el-form-item prop="email" label="邮箱" label-width="70px">
           <!-- v-model get the model object's value -->
           <el-input
             prefix-icon="el-icon-user-solid"
@@ -26,7 +25,7 @@
           ></el-input>
         </el-form-item>
         <!-- password -->
-        <el-form-item prop="password">
+        <el-form-item prop="password" label="密码" label-width="70px">
           <el-input
             prefix-icon="el-icon-lock"
             type="password"
@@ -125,7 +124,7 @@ export default {
         // save the token into the session
         window.sessionStorage.setItem("token", data.token);
         // router push to the /home section
-        this.$router.push("/home");
+        this.$router.push("/welcome");
       });
     },
 
@@ -151,27 +150,6 @@ export default {
   top: 50%;
   transform: translate(-50%, -50%);
 
-  .login_avatar {
-    height: 130px;
-    width: 130px;
-    border: 1px solid #eee;
-    box-shadow: 0 0 10px #ddd;
-    // round corner
-    border-radius: 50%;
-    // location in the middle
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    // half of the body is in the login form section
-    img {
-      width: 100%;
-      height: 100%;
-      // round corner
-      border-radius: 50%;
-      background-color: #eee;
-    }
-  }
-
   // form section
   .login_form {
     // form area in the center
@@ -183,7 +161,9 @@ export default {
     // button in the right bottom corner
     box-sizing: border-box;
   }
-
+  .company_name {
+    text-align: center;
+  }
   .btns {
     display: flex;
     justify-content: flex-end;

@@ -28,7 +28,9 @@ export default {
           newUser.password = hash;
           newUser
             .save()
-            .then((user) => res.json({ msg: "register successfully" })); // send back the user data in the database
+            .then((user) => res.json({
+              success: true,
+              msg: "register successfully" })); // send back the user data in the database
         });
       });
     });

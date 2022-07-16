@@ -52,28 +52,29 @@
             fixed
           >
           </el-table-column>
-
           <el-table-column
-            prop="describe"
+            prop="type"
             label="收支类型"
             width="120"
             align="center"
           >
           </el-table-column>
-          <el-table-column prop="income" label="收入" align="center">
-          </el-table-column>
           <el-table-column
-            prop="expand"
-            label="支出"
+            prop="describe"
+            label="描述"
             width="120"
             align="center"
           >
+          </el-table-column>
+          <el-table-column prop="income" label="收入" align="center" width="60">
+          </el-table-column>
+          <el-table-column prop="expand" label="支出" width="90" align="center">
           </el-table-column>
           <!-- data switch status -->
           <el-table-column
             prop="cash"
             label="账户现金"
-            width="120"
+            width="90"
             align="center"
           >
           </el-table-column>
@@ -93,67 +94,79 @@
             align="center"
             fixed="right"
           >
-            <!--                @click="handleEdit(scope.$index, scope.row)" -->
-            <el-button size="mini" type="primary" @click="handleEdit"
-              ><i class="el-icon-edit"></i
-            ></el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              ><i class="el-icon-delete"></i
-            ></el-button>
+            <template slot-scope="scope">
+              <!--                @click="handleEdit(scope.$index, scope.row)" -->
+              <el-button
+                size="mini"
+                type="primary"
+                @click="handleEdit(scope.row)"
+                ><i class="el-icon-edit"></i
+              ></el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.row._id)"
+                ><i class="el-icon-delete"></i
+              ></el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-row>
 
-      <!-- AddUser dialog section -->
+      <!-- AddFund dialog section -->
+
       <el-dialog title="添加资金信息" :visible.sync="dialogAddVisible">
         <el-form
-          :model="addUser_form"
-          :rules="addUser_rules"
-          ref="addUserFormRef"
+          :model="addFund_form"
+          :rules="addFund_rules"
+          ref="addFundFormRef"
         >
-          <!-- username -->
+          <!-- type -->
           <el-form-item
             label="收支类型"
             :label-width="formLabelWidth"
-            prop="username"
+            prop="type"
           >
-            <el-input
-              v-model="addUser_form.username"
-              autocomplete="off"
-            ></el-input>
+            <el-input v-model="addFund_form.type" autocomplete="off"></el-input>
           </el-form-item>
 
-          <!-- password -->
+          <!-- describe -->
+
           <el-form-item
             label="收支描述"
             :label-width="formLabelWidth"
-            prop="password"
+            prop="describ"
           >
             <el-input
-              v-model="addUser_form.password"
+              v-model="addFund_form.describ"
               type="text"
               autocomplete="off"
             ></el-input>
           </el-form-item>
-          <!-- email -->
-          <el-form-item label="收入" :label-width="formLabelWidth" prop="email">
+
+          <!-- income -->
+
+          <el-form-item
+            label="收入"
+            :label-width="formLabelWidth"
+            prop="income"
+          >
             <el-input
-              v-model="addUser_form.email"
-              type="email"
+              v-model="addFund_form.income"
+              type="text"
               autocomplete="off"
             ></el-input>
           </el-form-item>
-          <!-- mobile -->
+
+          <!-- expend -->
+
           <el-form-item
             label="支出"
             :label-width="formLabelWidth"
-            prop="mobile"
+            prop="expand"
           >
             <el-input
-              v-model="addUser_form.mobile"
+              v-model="addFund_form.expand"
               autocomplete="off"
             ></el-input>
           </el-form-item>
@@ -161,47 +174,46 @@
           <el-form-item
             label="账户现金"
             :label-width="formLabelWidth"
-            prop="mobile"
+            prop="cash"
           >
-            <el-input
-              v-model="addUser_form.mobile"
-              autocomplete="off"
-            ></el-input>
+            <el-input v-model="addFund_form.cash" autocomplete="off"></el-input>
           </el-form-item>
+
           <el-form-item
             label="备注"
             :label-width="formLabelWidth"
-            prop="mobile"
+            prop="remark"
           >
             <el-input
-              v-model="addUser_form.mobile"
+              v-model="addFund_form.remark"
               autocomplete="off"
             ></el-input>
           </el-form-item>
         </el-form>
 
         <!-- footer -->
+
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogAddVisible = false">取 消</el-button>
           <el-button type="primary" @click="addSubmit">确 定</el-button>
         </div>
       </el-dialog>
 
-      <!-- EditUser dialog section -->
+      <!-- EditFund dialog section -->
       <el-dialog title="修改资金信息" :visible.sync="dialogEditVisible">
         <el-form
-          :model="editUser_form"
-          :rules="addUser_rules"
-          ref="editUserFormRef"
+          :model="editFund_form"
+          :rules="addFund_rules"
+          ref="editFundFormRef"
         >
           <!-- username -->
           <el-form-item
             label="资金类型"
             :label-width="formLabelWidth"
-            prop="username"
+            prop="type"
           >
             <el-input
-              v-model="editUser_form.username"
+              v-model="editFund_form.type"
               autocomplete="off"
               disabled
             ></el-input>
@@ -211,11 +223,11 @@
           <el-form-item
             label="收支描述"
             :label-width="formLabelWidth"
-            prop="email"
+            prop="describe"
           >
             <el-input
-              v-model="editUser_form.email"
-              type="email"
+              v-model="editFund_form.describe"
+              type="text"
               autocomplete="off"
             ></el-input>
           </el-form-item>
@@ -223,40 +235,40 @@
           <el-form-item
             label="收入"
             :label-width="formLabelWidth"
-            prop="mobile"
+            prop="income"
           >
             <el-input
-              v-model="editUser_form.mobile"
+              v-model="editFund_form.income"
               autocomplete="off"
             ></el-input>
           </el-form-item>
           <el-form-item
             label="支出"
             :label-width="formLabelWidth"
-            prop="mobile"
+            prop="expand"
           >
             <el-input
-              v-model="editUser_form.mobile"
+              v-model="editFund_form.expand"
               autocomplete="off"
             ></el-input>
           </el-form-item>
           <el-form-item
             label="账户现金"
             :label-width="formLabelWidth"
-            prop="mobile"
+            prop="cash"
           >
             <el-input
-              v-model="editUser_form.mobile"
+              v-model="editFund_form.cash"
               autocomplete="off"
             ></el-input>
           </el-form-item>
           <el-form-item
             label="备注"
             :label-width="formLabelWidth"
-            prop="mobile"
+            prop="remark"
           >
             <el-input
-              v-model="editUser_form.mobile"
+              v-model="editFund_form.remark"
               autocomplete="off"
             ></el-input>
           </el-form-item>
@@ -307,52 +319,55 @@ export default {
       },
       allProfileList: [], //存储从后端获取到的全部数据
       filterTableData: [], //经过时间筛选后得到的数据
-      addUser_form: {
-        username: "",
-        password: "",
-        email: "",
-        mobile: "",
-        role_name: "",
+      addFund_form: {
+        type: "",
+        describ: "",
+        income: "",
+        expand: "",
+        cash: "",
+        remark: "",
       },
 
-      editUser_form: {
-        username: "",
-        password: "",
-        email: "",
-        mobile: "",
-        role_name: "",
+      editFund_form: {
+        _id: "",
+        type: "",
+        describe: "",
+        income: "",
+        expand: "",
+        cash: "",
+        remark: "",
       },
-      addUser_rules: {
-        username: [
+      addFund_rules: {
+        type: [
           // rules not filled the content
-          { required: true, message: "用户名必填", trigger: "blur" },
+          { required: true, message: "type必填", trigger: "blur" },
           // rule filled the content
           {
             min: 3,
-            max: 6,
-            message: "用户名长度要在3到6个字符",
+            max: 20,
+            message: "type长度要在3到20个字符",
             trigger: "blur",
           },
         ],
-        password: [
+        describe: [
           // rules not filled the content
-          { required: true, message: "用户密码必填", trigger: "blur" },
+          { required: true, message: "收支描述必填", trigger: "blur" },
           // rule filled the content
           {
             min: 3,
-            max: 6,
-            message: "用户密码长度要在3到6个字符",
+            max: 20,
+            message: "收支描述长度要在3到20个字符",
             trigger: "blur",
           },
         ],
-        email: [
+        income: [
           // rules not filled the content
-          { required: true, message: "邮箱必填", trigger: "blur" },
+          { required: true, message: "收入必填", trigger: "blur" },
           // rule filled the content
         ],
-        mobile: [
+        expand: [
           // rules not filled the content
-          { required: true, message: "手机号必填", trigger: "blur" },
+          { required: true, message: "支出必填", trigger: "blur" },
           // rule filled the content
         ],
       },
@@ -398,17 +413,98 @@ export default {
         this.profileList = tables;
       }
     },
-    addSubmit() {
-      console.log("addUserSubmit");
+    async addSubmit() {
+      this.$refs.addFundFormRef.validate(async (valid) => {
+        if (!valid) {
+          return false;
+        }
+        // console.log(this.addFund_form);
+        // vue的$axios请求设置为form表单类型
+        // https://blog.csdn.net/s18813688772/article/details/111715754
+        await this.$axios
+          .post("http://localhost:8800/api/profile", this.addFund_form, {
+            headers: { "content-type": "application/json" },
+          })
+          .then((res) => {
+            this.allProfileList = res.data;
+            this.$message({
+              message: "创建成功",
+              type: "success",
+            });
+            this.dialogAddVisible = false;
+            this.loadData();
+          })
+          .catch((err) => {
+            this.$message.error("创建失败");
+            console.log(err);
+          });
+      });
     },
     editSubmit() {
+      this.$refs.editFundFormRef.validate(async (valid) => {
+        if (!valid) {
+          return false;
+        }
+        // console.log(this.addFund_form);
+        // vue的$axios请求设置为form表单类型
+        // https://blog.csdn.net/s18813688772/article/details/111715754
+        await this.$axios
+          .put(`http://localhost:8800/api/profile/${this.editFund_form._id}`, this.editFund_form, {
+            headers: { "content-type": "application/json" },
+          })
+          .then((res) => {
+            this.allProfileList = res.data;
+            this.$message({
+              message: "更新成功",
+              type: "success",
+            });
+            this.dialogEditVisible = false;
+            this.loadData();
+          })
+          .catch((err) => {
+            this.$message.error("更新失败");
+            console.log(err);
+          });
+      });
       console.log("editUserSubmit");
     },
-    handleEdit() {
-      (this.dialogEditVisible = true), console.log("edit");
+    handleEdit(row) {
+      this.dialogEditVisible = true;
+      this.editFund_form = row;
+      console.log(this.editFund_form)
     },
-    handleDelete() {
-      console.log("delete");
+    async handleDelete(id) {
+      await this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning", // text color in the middle
+      })
+        .then(async () => {
+          await this.$axios
+            .delete(`http://localhost:8800/api/profile/${id}`)
+            .then((res) => {
+              //  console.log(res.data.meta)
+              if (res.data.success != true) {
+                this.$message.error("删除失败");
+              }
+              // When you finish the delete, then
+              //1.Reset the search field
+              // 2.load the data again(query info is zero)
+
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+              this.loadData();
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+      console.log(id);
     },
   },
 };

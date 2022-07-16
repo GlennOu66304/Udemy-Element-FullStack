@@ -5,7 +5,7 @@ export default {
     //  use the Model
     const newProfile = new ProfileModel({
       type: req.body.type,
-      describe: req.body.describ,
+      describe: req.body.describe,
       income: req.body.income,
       expand: req.body.expand,
       cash: req.body.cash,
@@ -15,7 +15,11 @@ export default {
     newProfile
       .save()
       .then((ticket) => {
-        res.status(200).json(ticket);
+        res.status(200).json({
+          success: true,
+          msg: "create profile successfully",
+          ticket,
+        });
       })
       .catch((err) => {
         console.error(err);
@@ -25,7 +29,7 @@ export default {
   updateProfile: async (req, res) => {
     try {
       const profile = await ProfileModel.findByIdAndUpdate(
-        req.params.id,
+        req.params.id ,
         {
           $set: req.body,
         },
@@ -34,7 +38,11 @@ export default {
       // [yup this looks like a confirmed bug:]
       // https://github.com/Automattic/mongoose/issues/5455
       // console.log(req.params.id);
-      res.status(200).json(profile);
+      res.status(200).json({
+        msg: "update successfully",
+        success: true,
+        profile,
+      });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -42,13 +50,16 @@ export default {
 
   //delete ticket
   deletetProfile: async (req, res) => {
-    ProfileModel.findOneAndDelete(req.params.id)
-      .then(() => {
-        res.status(200).json("Ticket has been deleted");
-      })
-      .catch((err) => {
+    console.log(req.params.id);
+    // find and delete does not work here, need to replace with findOneAndRemove
+    ProfileModel.findOneAndRemove({ _id: req.params.id }, (err, docs) => {
+      if (err) {
         res.status(404).json({ msg: "delete failed" });
-      });
+      } else {
+        console.log("Result : ", docs);
+        res.status(200).json({ success: true, msg: "Ticket has been deleted" });
+      }
+    });
   },
 
   //get a profile

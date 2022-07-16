@@ -7,6 +7,7 @@ axios.interceptors.request.use(
   (config) => {
     config.headers.Authorization = window.sessionStorage.getItem("token");
     // console.log(config);
+    
     return config;
   },
   (error) => {
@@ -32,6 +33,7 @@ import {
   Table,
   TableColumn,
   Message,
+  MessageBox,
   Breadcrumb,
   BreadcrumbItem,
   Card,
@@ -79,6 +81,7 @@ Vue.use(DatePicker);
 Vue.use(Dialog);
 Vue.config.productionTip = false;
 Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
 new Vue({
   router,
   render: (h) => h(App),

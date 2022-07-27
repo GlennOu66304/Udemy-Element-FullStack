@@ -16,6 +16,7 @@ app.use("/api/profile", profileRoute);
 
 dotenv.config();
 // mongodb connect
+// when you changed the database, you need to restart the server
 mongoose.connect(
   process.env.MONGO_URL,
   { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },

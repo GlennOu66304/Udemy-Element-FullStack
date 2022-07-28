@@ -61,7 +61,7 @@ export default {
           // rule filled the content
           {
             min: 3,
-            max: 15,
+            max: 50,
             message: "用户名长度要在3到15个字符",
             trigger: "blur",
           },
@@ -96,7 +96,7 @@ export default {
 
         // desctructure content
         const { data } = await axios.post(
-          "http://localhost:8800/api/auth/login",
+          "https://api.glennou.cn/api/auth/login",
           this.loginForm
         );
 

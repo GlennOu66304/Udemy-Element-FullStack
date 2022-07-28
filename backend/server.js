@@ -13,6 +13,10 @@ import profileRoute from "./routes/profile/profile.js";
 
 app.use("/api/auth", authRoute);
 app.use("/api/profile", profileRoute);
+// add this below app.use("/", routes) to make index.html a static file
+app.route("/").get(function (req, res) {
+  res.sendFile(process.cwd() + "/index.html");
+});
 
 dotenv.config();
 // mongodb connect

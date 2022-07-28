@@ -312,6 +312,7 @@
 </template>
 
 <script>
+import axios from "../utils/interceptor";
 export default {
   name: "Funds",
   components: {},
@@ -396,7 +397,7 @@ export default {
     // Load the data
 
     async loadData() {
-      await this.$axios.get("http://localhost:8800/api/profile").then((res) => {
+      await axios.get("/api/profile").then((res) => {
         // console.log(res.data);
         this.allProfileList = res.data;
         this.filterTableData = res.data;
@@ -433,10 +434,10 @@ export default {
           return false;
         }
         // console.log(this.addFund_form);
-        // vue的$axios请求设置为form表单类型
+        // vue的$axios请求设置为form表单类型/api/api/p
         // https://blog.csdn.net/s18813688772/article/details/111715754
-        await this.$axios
-          .post("http://localhost:8800/api/profile", this.addFund_form, {
+        await axios
+          .post("/api/profile", this.addFund_form, {
             headers: { "content-type": "application/json" },
           })
           .then((res) => {
@@ -462,9 +463,9 @@ export default {
         // console.log(this.addFund_form);
         // vue的$axios请求设置为form表单类型
         // https://blog.csdn.net/s18813688772/article/details/111715754
-        await this.$axios
+        await axios
           .put(
-            `http://localhost:8800/api/profile/${this.editFund_form._id}`,
+            `/api/profile/${this.editFund_form._id}`,
             this.editFund_form,
             {
               headers: { "content-type": "application/json" },
@@ -498,23 +499,21 @@ export default {
         type: "warning", // text color in the middle
       })
         .then(async () => {
-          await this.$axios
-            .delete(`http://localhost:8800/api/profile/${id}`)
-            .then((res) => {
-              //  console.log(res.data.meta)
-              if (res.data.success != true) {
-                this.$message.error("删除失败");
-              }
-              // When you finish the delete, then
-              //1.Reset the search field
-              // 2.load the data again(query info is zero)
+          await axios.delete(`/api/profile/${id}`).then((res) => {
+            //  console.log(res.data.meta)
+            if (res.data.success != true) {
+              this.$message.error("删除失败");
+            }
+            // When you finish the delete, then
+            //1.Reset the search field
+            // 2.load the data again(query info is zero)
 
-              this.$message({
-                type: "success",
-                message: "删除成功!",
-              });
-              this.loadData();
+            this.$message({
+              type: "success",
+              message: "删除成功!",
             });
+            this.loadData();
+          });
         })
         .catch(() => {
           this.$message({

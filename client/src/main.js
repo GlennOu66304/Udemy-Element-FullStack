@@ -1,19 +1,20 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router/index.js";
-import axios from "axios";
-Vue.prototype.$axios = axios;
-axios.interceptors.request.use(
-  (config) => {
-    config.headers.Authorization = window.sessionStorage.getItem("token");
-    // console.log(config);
+// import axios from "axios";
+
+// Vue.prototype.$axios = axios;
+// axios.interceptors.request.use(
+//   (config) => {
+//     config.headers.Authorization = window.sessionStorage.getItem("token");
+//     // console.log(config);
     
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 import {
   Form,
   FormItem,

@@ -123,7 +123,7 @@ export default {
         }
         // desctructure content
         const { data } = await axios.post(
-          "http://localhost:8800/api/auth/register",
+          "https://api.glennou.cn/api/auth/register",
           this.registerForm
         );
 
